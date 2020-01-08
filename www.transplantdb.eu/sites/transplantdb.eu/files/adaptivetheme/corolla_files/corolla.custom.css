@@ -1,0 +1,73 @@
+/* Add any valid CSS declarations */
+
+/* Fixes for the search form block */
+#menu-bar .block-17 {
+  float: right;
+  height: 0px;
+}
+
+#menu-bar .block-17 .form-item {
+  margin-top: 1px;
+}
+
+.container-inline div, .container-inline label {
+  display: inline-block;
+}
+
+/* Make branding smaller */
+#branding {
+   padding: 5px 0 8px 25px;
+}
+
+/* Fix a bug in superfish on test */
+#block-superfish-1 {
+  margin-top: 4px;
+}
+
+/* Fix for LAILAPS portlet */
+#suggestions {
+  border:0;
+}
+
+/* The 'Add new comment' heading is huge and right on top of the content */
+#comments {
+  margin-top: 5em;
+}
+
+/* Add pretty grey lines everywhere ... */
+.region-two-50-first .region-inner {
+  border-right: 1px solid lightgrey;
+}
+
+/* Space after 'NEWS' */
+.region-two-50-first h2 {
+  padding-bottom: 20px;
+}
+
+/* Having fun yet? */
+.partner-logos-filler {
+  text-align: center;
+}
+
+/* Put some v-space between event titles on the training resources page */
+.view-training-resources h3 {
+  padding-top: 1.5em;
+}
+
+/* Squash up slideshow items */
+.pane-service-slideshow {
+  margin-bottom: -10px !important;
+}
+
+#genoverse table img {
+  margin: 0px;
+}
+
+#genoverse table.gv {
+  width: auto;
+}
+
+/* H2s are ALLCAPS... except when they aren't... */
+.no-uppercase {
+  text-transform: none;
+}

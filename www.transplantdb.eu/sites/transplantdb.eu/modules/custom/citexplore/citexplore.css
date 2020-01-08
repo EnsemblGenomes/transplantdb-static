@@ -1,0 +1,40 @@
+#publication-node-form .form-item-title {
+	padding-top:15px;
+	clear:both;
+}
+
+#search-citexplore {
+	clear: both;
+	float:left;
+}
+
+#citexplore-throbber {
+display:none;
+float: left;
+margin-left: 10px;
+margin-top:2px;
+width:18px;
+height:18px;
+background: transparent url(/misc/throbber.gif) no-repeat 0px -18px;
+}
+
+#publication-node-form .form-type-radio {
+	float:left;
+	margin-right:10px;
+}
+
+#publication-node-form .field-name-publication-paper-id-type .description {
+	clear: both;
+}
+
+.citexplore-publication .publication_view_label {
+	float:left;
+}
+
+.citexplore-publication .publication_view_title {
+font-weight: bold;
+}
+
+.citexplore-publication .views-row {
+margin-bottom:10px;
+}
