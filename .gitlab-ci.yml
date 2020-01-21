@@ -17,11 +17,10 @@ Build Image:
 
   script:
     - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA} -f Dockerfile .
-    - docker images
     - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
   
   only:
-   - deploy-k8s
+   - master
 
 Deploy Staging:
   stage: deploy
@@ -30,11 +29,10 @@ Deploy Staging:
     name: eg-static-staging
 
   script:
-    - kubectl get ns
     - sed -i "s/<CI_PROJECT_PATH_SLUG>/${CI_PROJECT_PATH_SLUG}/g" transplantdb_deployment.yaml
     - sed -i "s/<CI_ENVIRONMENT_SLUG>/${CI_ENVIRONMENT_SLUG}/g" transplantdb_deployment.yaml
     - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" transplantdb_deployment.yaml
     - kubectl apply -f transplantdb_deployment.yaml
 
   only:
-   - deploy-k8s
+   - master
