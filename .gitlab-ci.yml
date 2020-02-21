@@ -2,37 +2,56 @@ stages:
   - build_image
   - deploy
 
+variables:
+  DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  DOCKER_TLS_CERTDIR: ""
 
-Build Image:
+.build:
   stage: build_image
   image: docker
   services:
     - docker:dind
 
-  variables:
-    DOCKER_TLS_CERTDIR: ""
-
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
   script:
-    - docker build -t ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA} -f Dockerfile .
-    - docker push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
-  
-  only:
-   - master
+    - docker build -t ${DOCKER_IMAGE} -f Dockerfile .
+    - docker push ${DOCKER_IMAGE}
+    - docker logout $CI_REGISTRY
 
-Deploy Staging:
+.deploy:
   stage: deploy
   image: dockerhub.ebi.ac.uk/kamal/deploy-tools:0.1
-  environment:
-    name: eg-static-staging
-
   script:
     - sed -i "s/<CI_PROJECT_PATH_SLUG>/${CI_PROJECT_PATH_SLUG}/g" transplantdb_deployment.yaml
     - sed -i "s/<CI_ENVIRONMENT_SLUG>/${CI_ENVIRONMENT_SLUG}/g" transplantdb_deployment.yaml
-    - sed -i "s/<VERSION>/${CI_COMMIT_SHORT_SHA}/g" transplantdb_deployment.yaml
+    - sed -i "s#<DOCKER_IMAGE>#${DOCKER_IMAGE}#g" transplantdb_deployment.yaml
     - kubectl apply -f transplantdb_deployment.yaml
 
+
+Docker:
+  extends: .build
   only:
-   - master
+   - deploy-k8s
+
+Live:EHK-HH:
+  extends: .deploy
+  environment:
+    name: ehk-hh-tp-static-live
+  only:
+   - deploy-k8s
+
+Live:WP-HX:
+  extends: .deploy
+  environment:
+    name: wp-hx-tp-static-live
+  only:
+   - deploy-k8s
+
+Live:WP-HH:
+  extends: .deploy
+  environment:
+    name: wp-hh-tp-static-live
+  only:
+   - deploy-k8s
