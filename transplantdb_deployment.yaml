@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: transplantdb-deployment
-        image: dockerhub.ebi.ac.uk/kamal/transplantdb-static:<VERSION>
+        image: <DOCKER_IMAGE>
         ports:
         - containerPort: 80
         imagePullPolicy: Always
