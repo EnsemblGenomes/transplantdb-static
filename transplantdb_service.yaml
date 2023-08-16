@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name:  transplantdb-svc
   labels:
-    app: transplantdb-svc
+    ensembl.web.app.name: transplantdb-svc
 spec:
   selector:
-    app: transplantdb
+    ensembl.web.app.name: transplantdb
   type: ClusterIP
   ports:
     - port: 80

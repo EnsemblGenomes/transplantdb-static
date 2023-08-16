@@ -22,4 +22,4 @@ spec:
         - configMapRef:
             name: proxy-configmap
       imagePullSecrets:
-        - name: ensemblweb-pull-secre
+        - name: ensemblweb-pull-secret
