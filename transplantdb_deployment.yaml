@@ -1,24 +1,25 @@
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata: 
   name: transplantdb-deployment
-  annotations:
-    app.gitlab.com/app: <CI_PROJECT_PATH_SLUG>
-    app.gitlab.com/env: <CI_ENVIRONMENT_SLUG>
-  namespace: eg-static
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      ensembl.web.app.name: transplantdb
   template:
     metadata:
       labels:
-        app: transplantdb
-        RUP: nickl
+        ensembl.web.app.name: transplantdb
     spec:
       containers:
-      - name: transplantdb-deployment
+      - name: transplantdb
         image: <DOCKER_IMAGE>
         ports:
         - containerPort: 80
         imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: proxy-configmap
       imagePullSecrets:
-        - name: eg-transplantdb-pull-secrets
+        - name: ensemblweb-pull-secre
