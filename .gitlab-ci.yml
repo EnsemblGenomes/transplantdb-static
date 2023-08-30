@@ -1,0 +1,47 @@
+stages:
+  - build_image
+  - deploy
+
+variables:
+  DOCKER_IMAGE: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  DOCKER_TLS_CERTDIR: ""
+
+.build:
+  stage: build_image
+  image: docker
+  services:
+    - docker:dind
+
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+  script:
+    - docker build -t ${DOCKER_IMAGE} -f Dockerfile .
+    - docker push ${DOCKER_IMAGE}
+    - docker logout $CI_REGISTRY
+
+.deploy:
+  stage: deploy
+  image: dockerhub.ebi.ac.uk/ensembl-web/deploy-tools:latest
+  script:
+    - sed -i "s#<DOCKER_IMAGE>#${DOCKER_IMAGE}#g" transplantdb_deployment.yaml
+    - kubectl apply -f transplantdb_deployment.yaml
+
+Docker:
+  extends: .build
+  only:
+   - deploy-k8s
+
+Live:WP41-HX:
+  extends: .deploy
+  environment:
+    name: wp41-hx-static
+  only:
+   - deploy-k8s
+
+Live:WP40-HL:
+  extends: .deploy
+  environment:
+    name: wp40-hl-static
+  only:
+   - deploy-k8s

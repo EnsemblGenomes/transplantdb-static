@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: transplantdb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      ensembl.web.app.name: transplantdb
+  template:
+    metadata:
+      labels:
+        ensembl.web.app.name: transplantdb
+    spec:
+      containers:
+      - name: transplantdb
+        image: <DOCKER_IMAGE>
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+        envFrom:
+        - configMapRef:
+            name: proxy-configmap
+      imagePullSecrets:
+        - name: ensemblweb-pull-secret
